@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DavFood</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top-bar" id="top">
+    <div class="logo">
+      <i class="fa-solid fa-bowl-food"></i>
+      <span>DavFood</span>
+    </div>
+    <nav class="nav" id="navMenu">
+      <a href="#hero"><span>Home</span></a>
+      <a href="#features"><span>Features</span></a>
+      <a href="#about"><span>Restaurants</span></a>
+      <a href="#contact"><span>Contact</span></a>
+    </nav>
+    
+    <!-- Mobile Sidebar Menu -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <i class="fa-solid fa-bowl-food"></i>
+            <span>DavFood</span>
+          </div>
+          <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="sidebar-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search restaurants...">
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#hero" class="sidebar-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+          </a>
+          <a href="#features" class="sidebar-nav-item">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Categories</span>
+          </a>
+          <a href="#about" class="sidebar-nav-item">
+            <i class="fa-solid fa-store"></i>
+            <span>Restaurants</span>
+          </a>
+          <div class="sidebar-divider"></div>
+          <a href="#contact" class="sidebar-nav-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Contact</span>
+          </a>
+          <a href="#" class="sidebar-nav-item">
+            <i class="fa-solid fa-headset"></i>
+            <span>Support</span>
+          </a>
+          <a href="#" class="sidebar-nav-item">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="sidebar-user-info">
+              <span class="sidebar-user-name">Guest User</span>
+              <span class="sidebar-user-email">guest@davfood.com</span>
+            </div>
+            <button class="sidebar-logout" aria-label="Logout">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="location">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Davao City, Philippines</span>
+      </div>
+      <button class="ghost">Log in</button>
+      <button class="primary">Sign up</button>
+      <button class="menu-toggle" aria-label="Toggle navigation" id="menuToggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1>Hungry? Let’s Deliver Happiness to Your <span class="accent">Doorstep!</span></h1>
+        <p class="subtitle">Explore a world of flavors from the best restaurants in your city. Whether you crave something new or your favorite comfort food, we’ve got you covered with quick and easy delivery.</p>
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search for cuisines or dishes">
+          <button class="primary">Search</button>
+        </div>
+        <div class="suggested">
+          <span>Suggested:</span>
+          <button class="pill">Chicken Inasal</button>
+          <button class="pill">Sisig</button>
+          <button class="pill">Lechon Kawali</button>
+          <button class="pill">More</button>
+        </div>
+        <div class="hero-cta">
+          <button class="primary">Order Now</button>
+          <button class="ghost">Browse Offers</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Fresh pizza with toppings">
+        <div class="floating-card">
+          <i class="fa-solid fa-bolt"></i>
+          <div>
+            <p>Express Delivery</p>
+            <small><i class="fa-solid fa-clock"></i> Under 30 minutes</small>
+          </div>
+        </div>
+      </div>
+      <div class="hero-map-container">
+        <h3>Nearby Restaurants</h3>
+        <div id="restaurantMap"></div>
+      </div>
+    </section>
+
+    <section class="brand-strip">
+      <h2>Nearby Fast Food Restaurants</h2>
+      <div class="brand-logos">
+        <img src="resources/Jollibee_2011_logo.svg" alt="Jollibee logo">
+        <img src="resources/Mang_Inasal.svg" alt="mang inasal logo">
+        <img src="resources/Chowking_logo.svg" alt="Chowking logo">
+        <img src="resources/Burger_King_logo_(1999–2020).svg.png" alt="Burger King logo">
+        <img src="resources/McDonald's_Golden_Arches.svg.png" alt="McDonald's logo">
+      </div>
+    </section>
+
+    <section class="categories" id="features">
+      <div class="section-heading">
+        <h3>Top Foods Categories</h3>
+        <div class="filters">
+          <button class="pill active">All</button>
+          <button class="pill">Grill and BBQ</button>
+          <button class="pill">Seafoods</button>
+          <button class="pill">Noodles</button>
+          <button class="pill">More</button>
+        </div>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <img src="resources/homemadpiza.jpg" alt="Pizza">
+          <div class="card-body">
+            <h4>Pizza</h4>
+            <p>12 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See pizza options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+        <article class="card">
+          <img src="/resources/fried chicken.jpg" alt="Fried chicken">
+          <div class="card-body">
+            <h4>Broast</h4>
+            <p>13 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See broast options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Chicken platter">
+          <div class="card-body">
+            <h4>Chicken</h4>
+            <p>16 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See chicken options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Burger">
+          <div class="card-body">
+            <h4>Burger</h4>
+            <p>18 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See burger options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80" alt="Dessert">
+          <div class="card-body">
+            <h4>Desserts</h4>
+            <p>10 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See dessert options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Seafood">
+          <div class="card-body">
+            <h4>Seafood</h4>
+            <p>9 restaurant products</p>
+          </div>
+          <button class="icon-btn" aria-label="See seafood options"><i class="fa-solid fa-arrow-right"></i></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="popular" id="about">  
+      <div class="section-heading">
+        <h2>Popular Restaurants Near You</h2>
+        <div class="filters">
+          <button class="pill active">All</button>
+          <button class="pill">Grill and BBQ</button>
+          <button class="pill">Pork</button>
+          <button class="pill">Family Dining</button>
+          <button class="pill">More</button>
+        </div>
+      </div>
+      <div class="grid wide">
+        <article class="card horizontal">
+          <img src="resources/penongs.webp" alt="Colorful restaurant interior">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-solid fa-heart"></i></button>
+          <div class="card-body">
+            <h4>Penong's Barbeque Seafood & Grill</h4>
+            <p>A casual Filipino grill famous for chicken inasal, BBQ, and unlimited rice. <span><i class="fa-solid fa-star"></i> 4.4</span> by 3k+ foodies.</p>
+            <div class="tags">
+              <span class="pill"><i class="fa-solid fa-truck"></i> Free Delivery</span>
+              <span class="pill"><i class="fa-solid fa-tag"></i> 10% Off Today</span>
+            </div>
+          </div>
+        </article>
+        <article class="card horizontal">
+          <img src="resources/sisig factory.jpg" alt="Outdoor dining">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-solid fa-heart"></i></button>
+          <div class="card-body">
+            <h4>Sisig Factory</h4>
+            <p>Sisig-style pork, tangy tamarind sauce, and crispy onions. <span><i class="fa-solid fa-star"></i> 4.1</span></p>
+            <div class="tags">
+              <span class="pill"><i class="fa-solid fa-leaf"></i> Healthy</span>
+              <span class="pill"><i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery</span>
+            </div>
+          </div>
+        </article>
+        <article class="card horizontal">
+          <img src="resources/garden bay.webp" alt="Table with food">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-solid fa-heart"></i></button>
+          <div class="card-body">
+            <h4>Garden Bay Restaurant & Resort</h4>
+            <p>Filipino-style dishes, friendly service, and scenic ocean views — perfect for family meals, casual dining, or sunset dinners by the bay. <span><i class="fa-solid fa-star"></i> 4.7</span></p></p>
+            <div class="tags">
+              <span class="pill"><i class="fa-solid fa-gift"></i> Meal Deals</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="features-steps">
+      <div class="section-heading">
+        <h3>Simple and Easy</h3>
+        <p>Order your favorite meals in just a few steps.</p>
+      </div>
+      <div class="grid three">
+        <article class="feature">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <h5>Search Restaurants</h5>
+          <p>Find the best spots in your area with curated lists for every craving.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-wallet"></i>
+          <h5>Cash on Delivery</h5>
+          <p>Order with confidence using your favorite payment method at the door.</p>
+        </article>
+        <article class="feature">
+          <i class="fa-solid fa-truck-fast"></i>
+          <h5>Receive Order</h5>
+          <p>Track in real-time as your meal leaves the kitchen and heads your way.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-text">
+        <h2>We’ve Got You Covered 24/7!</h2>
+        <p>Day or night, get your favorite meals delivered hot and fresh. Discover top restaurants and lightning-fast riders near you.</p>
+        <div class="hero-cta">
+          <button class="primary">Search Restaurants</button>
+          <button class="ghost">View Special Offers</button>
+        </div>
+      </div>
+      <div class="cta-visual">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Delivery scooter illustration">
+      </div>
+    </section>
+
+    <section class="tips">
+      <div class="section-heading">
+        <h3>DavFood Tips & Tricks</h3>
+        <p>Get more from every order with insider advice, deals, and how-tos.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <img src="resources/pizza-slices.jpg" alt="Pizza slices">
+          <div class="card-body">
+            <h4>Best Late-Night Bites</h4>
+            <p>Top spots that keep the oven warm past midnight.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80" alt="Healthy bowl">
+          <div class="card-body">
+            <h4>Customize Your Order</h4>
+            <p>Swap sides, add notes, and make every dish truly yours.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1458642849426-cfb724f15ef7?auto=format&fit=crop&w=800&q=80" alt="Group enjoying food">
+          <div class="card-body">
+            <h4>Party Packs & Sharing</h4>
+            <p>Bundle deals that make game night or movie marathons a feast.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="about-text">
+        <h2>About DavFood</h2>
+        <p>DavFood connects you to the tastiest meals from international restaurants, curated for every mood. We solve the hassle of meal planning by surfacing the best nearby options with ratings, reviews, and lightning-fast delivery windows.</p>
+        <p>Our mission is to make great food effortless. With smart suggestions, real-time tracking, and 24/7 support, you get convenience and confidence in every order.</p>
+        <ul>
+          <li><i class="fa-solid fa-check-circle"></i> Curated partner restaurants only</li>
+          <li><i class="fa-solid fa-check-circle"></i> Real-time rider tracking</li>
+          <li><i class="fa-solid fa-check-circle"></i> Exclusive daily deals for loyal members</li>
+        </ul>
+      </div>
+      <div class="about-media">
+        <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&w=800&q=80" alt="Chef preparing food">
+        <div class="testimonial">
+          <p>"DavFood made family dinners exciting again. The variety is unmatched!"</p>
+          <strong>— Maya Rahman</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="section-heading">
+        <h3>Loved by Foodies</h3>
+        <p>See why thousands trust us with their cravings.</p>
+      </div>
+      <div class="grid three">
+        <article class="quote">
+          <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+          <div class="quote-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p>"Lightning-fast delivery and the fries were still crispy. Impressed!"</p>
+          <div class="quote-author">
+            <i class="fa-solid fa-user-circle"></i>
+            <span class="name">Jahid Hasan</span>
+          </div>
+        </article>
+        <article class="quote">
+          <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+          <div class="quote-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p>"Love the exclusive discounts. The app remembers my favorites."</p>
+          <div class="quote-author">
+            <i class="fa-solid fa-user-circle"></i>
+            <span class="name">Sarah Lee</span>
+          </div>
+        </article>
+        <article class="quote">
+          <div class="quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+          <div class="quote-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <p>"Customer support is top-notch. They solved my issue in minutes."</p>
+          <div class="quote-author">
+            <i class="fa-solid fa-user-circle"></i>
+            <span class="name">Liam Carter</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="footer-main">
+      <div class="footer-links-grid">
+        <div class="footer-column">
+          <h4>About DavFood</h4>
+          <ul class="footer-links">
+            <li><a href="#about">About DavFood</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Social Impact</a></li>
+            <li><a href="#">Partner Restaurants</a></li>
+            <li><a href="#">Delivery Partners</a></li>
+            <li><a href="#">Sitemap</a></li>
+            <li><a href="#">DavFood Global</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>My DavFood</h4>
+          <ul class="footer-links">
+            <li><a href="#">My Account</a></li>
+            <li><a href="#">Order Status</a></li>
+            <li><a href="#">Food Rewards</a></li>
+            <li><a href="#">Favorites</a></li>
+            <li><a href="#">Order History</a></li>
+            <li><a href="#">Subscribe to Deals</a></li>
+            <li><a href="#">Express Delivery</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Help & FAQs</h4>
+          <ul class="footer-links">
+            <li><a href="#">How to Order</a></li>
+            <li><a href="#">Delivery Info</a></li>
+            <li><a href="#">Payment Methods</a></li>
+            <li><a href="#">Returns & Refunds</a></li>
+            <li><a href="#">Track Your Order</a></li>
+            <li><a href="#">Customer Service</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Ways to Order</h4>
+          <ul class="footer-links">
+            <li><a href="#features">Browse Categories</a></li>
+            <li><a href="#about">Popular Restaurants</a></li>
+            <li><a href="#">Special Offers</a></li>
+            <li><a href="#">Gift Cards</a></li>
+            <li><a href="#">Store Locations</a></li>
+            <li><a href="#">Book a Table</a></li>
+            <li><a href="#">Group Orders</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-divider"></div>
+      
+      <div class="footer-newsletter-social">
+        <div class="footer-newsletter">
+          <h4>Sign up for DavFood Emails</h4>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); return false;">
+            <input type="email" placeholder="Email" required>
+            <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-arrow-right"></i></button>
+          </form>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        <p>Copyright © 2026 DavFood. All rights reserved. <a href="#">Terms of Use</a> | <a href="#">Privacy Policy</a></p>
+        <p class="footer-contact">
+          <i class="fa-solid fa-phone"></i> 1 877 DAVFOOD (1 877 328 3663) | 
+          <i class="fa-solid fa-envelope"></i> support@davfood.com
+        </p>
+      </div>
+      <a href="#top" class="back-to-top-btn"><i class="fa-solid fa-arrow-up"></i> TOP</a>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
